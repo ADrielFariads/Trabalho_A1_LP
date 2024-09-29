@@ -8,6 +8,7 @@ Constants.Constants.key = key
 
 df = data.read_data_set()
 data.shape_data_set(df)
+df = data.cut_short_games(df)
 
 
 

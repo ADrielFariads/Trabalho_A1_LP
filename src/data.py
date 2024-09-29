@@ -2,22 +2,30 @@ import pandas as pd
 import Constants
 import numpy as np
 
+df = pd.read_csv(Constants.Constants.path)
 
 def read_data_set():
     df = pd.read_csv(Constants.Constants.path)
     return df
 
+#elimina jogos com 3 ou menos turnos
+def cut_short_games(df):
+    
+    df = df[df['turns'] >= 3]
+    return df
+
+#separa os ratings em niveis alto, médio e baixo, usando quantis
 def shape_data_set(df):
     all_rating_players = pd.concat([df['white_rating'], df['black_rating']], ignore_index=True)
     quantis = quantil(all_rating_players, 3)
 
     df['level_black_player'] = [
-    'easy' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'hard' 
+    'low' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'high' 
     for rating in df['black_rating']
     ]
     
     df['level_white_player'] = [
-    'easy' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'hard' 
+    'low' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'high' 
     for rating in df['white_rating']
     ]
         
