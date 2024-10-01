@@ -1,5 +1,6 @@
 import sys, os
 import unittest
+import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
@@ -47,6 +48,68 @@ class Test_count_moves(unittest.TestCase):
         result = data_creator.count_moves(example, "viking")
         self.assertEqual(result, None)
 
+
+
+class Test_game_matriz(unittest.TestCase):
+
+    #testa a função para um jogo genérico
+    def test_common_game(self):
+        example = "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 d4 d6 c3 O-O Re1 Nb8 Bc2 Nbd7 Nbd2 c6 Nf1 Qc7 Ng3 g6 Bh6 Re8 Qd2 Bf8 Bxf8 Nxf8 Qg5 Qe7 h4 h6 Qxh6 Ng4 Qd2 Kg7 h5 Nh7 dxe5 dxe5 Bb3 Be6 Bxe6 Qxe6 Rad1 Rad8 Qxd8 Rxd8 Rxd8 Qxa2 Rd7 Qxb2 hxg6 Qxf2+ Kh1 Qxg3 Rf7+ Kxg6 Rxb7 Ng5 Rf1 Nxf3 Rxf3 Qh4+ Kg1 Qe1+ Rf1 Qe3+ Kh1 Qh6+ Kg1 Qh2#"
+        result = data_creator.game_matrix(example)
+        expected_result = np.array([[1, 1, 0, 3, 1, 4, 1, 0],
+        [0, 2, 1, 1, 2, 1, 1, 1],
+       [1, 0, 2, 1, 3, 1, 2, 5],
+       [0, 1, 0, 2, 1, 0, 2, 1],
+       [1, 0, 0, 1, 1, 0, 1, 2],
+       [0, 1, 1, 0, 1, 3, 2, 0],
+       [1, 2, 1, 2, 0, 1, 0, 1],
+       [1, 0, 0, 0, 2, 4, 3, 2]])
+        
+        np.testing.assert_equal(result, expected_result) #função para comparar arrays
+
+
+    def test_not_a_string(self):
+        example =  {
+    1: {"white": "e4", "black": "e5"},
+    2: {"white": "Nf3", "black": "Nc6"},
+    3: {"white": "Bb5", "black": "a6"},
+    4: {"white": "Ba4", "black": "Nf6"},
+    5: {"white": "O-O", "black": "Be7"},
+    6: {"white": "d4", "black": "d6"},
+    7: {"white": "c3", "black": "O-O"},
+    8: {"white": "Re1", "black": "Nb8"},
+    9: {"white": "Bc2", "black": "Nbd7"},
+    10: {"white": "Nbd2", "black": "c6"},
+    11: {"white": "Nf1", "black": "Qc7"},
+    12: {"white": "Ng3", "black": "g6"},
+    13: {"white": "Bh6", "black": "Re8"},
+    14: {"white": "Qd2", "black": "Bf8"},
+    15: {"white": "Bxf8", "black": "Nxf8"},
+    16: {"white": "Qg5", "black": "Qe7"},
+    17: {"white": "h4", "black": "h6"},
+    18: {"white": "Qxh6", "black": "Ng4"},
+    19: {"white": "Qd2", "black": "Kg7"},
+    20: {"white": "h5", "black": "Nh7"},
+    21: {"white": "dxe5", "black": "dxe5"},
+    22: {"white": "Bb3", "black": "Be6"},
+    23: {"white": "Bxe6", "black": "Qxe6"},
+    24: {"white": "Rad1", "black": "Rad8"},
+    25: {"white": "Qxd8", "black": "Rxd8"},
+    26: {"white": "Rxd8", "black": "Qxa2"},
+    27: {"white": "Rd7", "black": "Qxb2"},
+    28: {"white": "hxg6", "black": "Qxf2+"},
+    29: {"white": "Kh1", "black": "Qxg3"},
+    30: {"white": "Rf7+", "black": "Kxg6"},
+    31: {"white": "Rxb7", "black": "Ng5"},
+    32: {"white": "Rf1", "black": "Nxf3"},
+    33: {"white": "Rxf3", "black": "Qh4+"},
+    34: {"white": "Kg1", "black": "Qe1+"},
+    35: {"white": "Rf1", "black": "Qe3+"},
+    36: {"white": "Kh1", "black": "Qh6+"},
+    37: {"white": "Kg1", "black": "Qh2#"}
+}
+        result = data_creator.game_matrix(example)
+        self.assertEqual(result, None)
 
 
 

@@ -65,15 +65,15 @@ def count_moves(game:str, piece:str) -> int:
             moves = game.count(piece_code)
             return moves
     except KeyError:
-        print("Houve um erro, selecione um nome válido de peça")
+        print("There was an error, please select a valid piece name")
         return None
+    
 
 def game_matrix(game:str) -> np.array:
     """
     creates an 8x8 matrix which represents the most visited squares in the chess game
 
     Parameters:
-
     ----------
     game: str
         a string which represents the following game with algebrial notation
@@ -81,59 +81,65 @@ def game_matrix(game:str) -> np.array:
             "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 d4 d6 c3 O-O Re1 Nb8 Bc2 Nbd7"
 
     Returns: 
-    ----------
+    -------
     np.array
         An array which represent the number of times each square was visited 
 
 
     """
-    squares = {"a":0,
-               "b":1, 
-               "c":2, 
-               "d":3, 
-               "e":4, 
-               "f":5, 
-               "g":6, 
-               "h":7}
+    try:
+        assert isinstance(game, str)
 
-    matrix = np.zeros((8,8), dtype=int)
 
-    match_squares = re.sub(r'[KQNRBx+#=]', "", game)
-    moves = match_squares.split()
+        squares = {"a":0,
+                "b":1, 
+                "c":2, 
+                "d":3, 
+                "e":4, 
+                "f":5, 
+                "g":6, 
+                "h":7}
 
-    for i, each in enumerate(moves):
+        matrix = np.zeros((8,8), dtype=int)
 
-        if each == "1/2-1/2":
-            continue
+        match_squares = re.sub(r'[KQNRBx+#=]', "", game)
+        moves = match_squares.split()
 
-        elif each == "O-O":
-            if i % 2 == 1:
-                matrix[7][6] += 1
-                matrix[7][5] += 1
+        for i, each in enumerate(moves):
+
+            if each == "1/2-1/2":
+                continue
+
+            elif each == "O-O":
+                if i % 2 == 1:
+                    matrix[7][6] += 1
+                    matrix[7][5] += 1
+                else:
+                    matrix[0][6] += 1
+                    matrix[0][5] += 1
+
+            elif each == "O-O-O":
+                if i % 2 == 1:
+                    matrix[7][2] += 1
+                    matrix[7][3] += 1
+                else:
+                    matrix[0][2] += 1
+                    matrix[0][3] += 1
+
+
+                
+            elif each[0] in squares.keys():
+                column = squares[each[0]]
+                row = 8 - int(each[-1])
+                matrix[row][column] += 1
             else:
-                matrix[0][6] += 1
-                matrix[0][5] += 1
-
-        elif each == "O-O-O":
-            if i % 2 == 1:
-                matrix[7][2] += 1
-                matrix[7][3] += 1
-            else:
-                matrix[0][2] += 1
-                matrix[0][3] += 1
-
-
-            
-        elif each[0] in squares.keys():
-            column = squares[each[0]]
-            row = 8 - int(each[-1])
-            matrix[row][column] += 1
-        else:
-            continue
-
-
+                continue
+    except AssertionError:
+        print("The game must be provided in string format!")
+        return None
 
     return matrix
+
 
 
 
