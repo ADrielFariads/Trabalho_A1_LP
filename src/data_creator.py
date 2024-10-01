@@ -26,18 +26,6 @@ def count_moves(game:str, piece:str) -> int:
     None
         If an invalid piece name is provided, the function returns None and prints an error message.
 
-    Examples
-    --------
-    >>> game = "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 d4 d6 c3 O-O Re1 Nb8 Bc2 Nbd7 Nbd2 c6"
-    >>> count_moves(game, "pawn")
-    8
-    >>> count_moves(game, "knight")
-    4
-    >>> count_moves(game, "king")
-    1
-    >>> count_moves(game, "dragon")
-    Houve um erro, selecione um nome válido de peça
-    None
         """
     
     pieces = {
@@ -50,6 +38,9 @@ def count_moves(game:str, piece:str) -> int:
     }
     
     try:
+        assert isinstance(game, str)
+        assert isinstance(piece, str)
+
         if piece.lower() == "pawn":
             result = 0
             if game[0] in "a b c d e f g h".split():
@@ -67,8 +58,10 @@ def count_moves(game:str, piece:str) -> int:
     except KeyError:
         print("There was an error, please select a valid piece name")
         return None
+    except AssertionError:
+        print("The arguments are not valid")
+        return None
     
-
 def game_matrix(game:str) -> np.array:
     """
     creates an 8x8 matrix which represents the most visited squares in the chess game
@@ -89,8 +82,6 @@ def game_matrix(game:str) -> np.array:
     """
     try:
         assert isinstance(game, str)
-
-
         squares = {"a":0,
                 "b":1, 
                 "c":2, 
@@ -139,6 +130,61 @@ def game_matrix(game:str) -> np.array:
         return None
 
     return matrix
+
+def piece_matrix(game:str, piece:str) -> np.array:
+    """
+    Generates an 8x8 matrix counting the movements of a specific piece in a chess game.
+
+    Parameters:
+    ----------
+    game : str
+        A string representing the moves of the game, where each move is in chess notation.
+    piece : str
+        The type of piece to analyze (e.g., "pawn", "king", "queen", "knight", "bishop", or "rook").
+
+    Returns:
+    -------
+    np.array
+        An 8x8 matrix where each element represents the number of times the specified piece has been 
+        moved to the respective square on the chessboard. Returns `None` if the parameters are not of the correct type.
+
+    """
+    try:
+        assert isinstance(game, str)
+        assert isinstance(piece, str)
+        squares = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7}
+        pieces = {
+        "pawn": [" a", " b", " c", " d", " e", " f", " g", " h"],
+        "king": "K",
+        "queen": "Q",
+        "knight": "N",
+        "bishop": "B",
+        "rook": "R"}
+
+        matrix = np.zeros((8,8), dtype=int)
+        match_squares = re.sub(r'[+#=]', "", game)
+        moves = match_squares.split()
+        
+
+        for each in moves:
+            if piece == "pawn":
+                if len(each) == 2:  
+                    row = 8 - int(each[1]) 
+                    column = squares[each[0]]
+                    matrix[row][column] += 1
+
+            else:
+                if each[0] == pieces[piece]:  
+                    row = 8 - int(each[-1]) 
+                    column = squares[each[-2]]
+                    matrix[row][column] += 1
+
+        return matrix
+    except AssertionError:
+        return None
+            
+
+    
 
 
 
