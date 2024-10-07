@@ -102,10 +102,10 @@ def game_matrix(game:str) -> np.array:
 
         for i, each in enumerate(moves):
 
-            if each == "1/2-1/2":
+            if each == "1/2-1/2": #draw cases
                 continue
 
-            elif each == "O-O":
+            elif each == "O-O": #castle moves
                 if i % 2 == 1:
                     matrix[7][6] += 1
                     matrix[7][5] += 1
