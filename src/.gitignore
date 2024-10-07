@@ -1,0 +1,3 @@
+# Ignorar executáveis de motores de xadrez como Stockfish
+*.exe
+stockfish

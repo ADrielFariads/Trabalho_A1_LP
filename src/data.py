@@ -17,6 +17,7 @@ def cut_short_games(df):
 #separa os ratings em niveis alto, médio e baixo, usando quantis
 def shape_data_set(df):
     all_rating_players = pd.concat([df['white_rating'], df['black_rating']], ignore_index=True)
+    average_rating = (df['white_rating'] + df['black_rating'])/2
     quantis = quantil(all_rating_players, 3)
 
     df['level_black_player'] = [
@@ -28,6 +29,11 @@ def shape_data_set(df):
     'low' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'high' 
     for rating in df['white_rating']
     ]
+
+    df['game_level'] = [
+        'low' if game_rating < quantis[1] else 'medium' if game_rating < quantis[2]
+        else 'high' for game_rating in average_rating
+    ]
         
 
 def quantil(dados, quantidade_divisão):
@@ -35,6 +41,9 @@ def quantil(dados, quantidade_divisão):
     for i in range(0, quantidade_divisão):
         quantis[i + 1] = np.percentile(dados, (100/quantidade_divisão)* (i + 1))
     return quantis
+
+
+
 
 
  
