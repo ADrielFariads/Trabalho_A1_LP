@@ -8,11 +8,30 @@ def read_data_set():
     df = pd.read_csv(Constants.Constants.path)
     return df
 
-#elimina jogos com 3 ou menos turnos
 def cut_short_games(df):
+    '''
+    Cut the games that have less than three turns
+
+    Parameters:
+    --------------
+    DataFrame being analyzed
+
+    Returns:
+    --------------
+    The DataFrame without short games
     
-    df = df[df['turns'] >= 3]
-    return df
+    '''
+    try:
+        isinstance(df, pd.core.frame.DataFrame)
+        
+        df = df[df['turns'] >= 3]
+        return df
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the series (turns)')
+        return None
 
 def add_black_white_level(df):
     '''
