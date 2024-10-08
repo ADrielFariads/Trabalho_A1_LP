@@ -106,5 +106,50 @@ class Test_add_black_white_level(unittest.TestCase):
         result = result.reset_index(drop = True)
 
         pd.testing.assert_frame_equal(example, result)
+        
+
+class Test_add_game_level(unittest.TestCase):
+
+    def test_normal_case(self):
+
+        example_data = {
+            'black_rating': [1200,1500,2000],
+            'white_rating': [1250,1400,2050]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1500,2000],
+            'white_rating': [1250,1400,2050],
+            'game_level' : ['low', 'medium' , 'high']
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_game_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_equal_rating(self):
+    
+
+        example_data = {
+            'black_rating': [1200,1200],
+            'white_rating': [1200,1200]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1200],
+            'white_rating': [1200,1200],
+            'game_level' : ['high' , 'high'],
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_game_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
 
 
