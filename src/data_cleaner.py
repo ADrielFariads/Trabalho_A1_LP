@@ -81,6 +81,32 @@ def add_black_white_level(df):
     except ValueError:
         print('white_rating and black_rating must be of the same length')
         return None
+
+def quantile(data, number_of_divisions : int) -> set:
+    '''
+    Calculates the quantiles of a data set for the desired number of divisions
+
+    Parameters:
+    -------------
+    data: numerical data set
+    number_of_divisions : int
+
+    Returns:
+    -------------
+    Dict with key equal the number of the quantile containing the quantiles
+    
+    '''
+    try:
+        isinstance(data[0], np.int64 | int | float)
+        isinstance(number_of_divisions, int)
+
+        quantis = {}  
+        for i in range(0, number_of_divisions):
+            quantis[i + 1] = np.percentile(data, (100/number_of_divisions)* (i + 1))
+        return quantis
+    
+    except TypeError:
+        print('The arguments are not valid')
     
 
 
