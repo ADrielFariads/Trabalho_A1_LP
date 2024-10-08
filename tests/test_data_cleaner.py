@@ -20,3 +20,91 @@ class TestQuantil(unittest.TestCase):
 
     def test_zero_divisions(self):
         self.assertEqual(data_cleaner.quantile([1,2,3], 0), {})
+
+class Test_add_black_white_level(unittest.TestCase):
+
+    def test_normal_case(self):
+
+        example_data = {
+            'black_rating': [1200,1500,2000],
+            'white_rating': [1250,1400,2050]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1500,2000],
+            'white_rating': [1250,1400,2050],
+            'level_black_player' : ['low', 'medium' , 'high'],
+            'level_white_player' : ['low', 'medium' , 'high']
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_equal_level(self):
+
+        example_data = {
+            'black_rating': [1200,1200],
+            'white_rating': [1200,1200]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1200],
+            'white_rating': [1200,1200],
+            'level_black_player' : ['high' , 'high'],
+            'level_white_player' : ['high' , 'high']
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_black_equal_level(self):
+
+        example_data = {
+            'black_rating': [1200,1200],
+            'white_rating': [1400,1600]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1200],
+            'white_rating': [1400,1600],
+            'level_black_player' : ['medium' , 'medium'],
+            'level_white_player' : ['high' , 'high']
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+    
+    def test_white_equal_level(self):
+
+        example_data = {
+            'black_rating': [1200,1200],
+            'white_rating': [1400,1600]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+            'black_rating': [1200,1200],
+            'white_rating': [1400,1200],
+            'level_black_player' : ['high' , 'high'],
+            'level_white_player' : ['medium' , 'medium']
+        }
+        result = pd.DataFrame(result_data)
+
+        example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+
