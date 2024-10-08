@@ -14,34 +14,46 @@ def cut_short_games(df):
     df = df[df['turns'] >= 3]
     return df
 
-#separa os ratings em niveis alto, médio e baixo, usando quantis
 def add_black_white_level(df):
-    all_rating_players = pd.concat([df['white_rating'], df['black_rating']], ignore_index=True)
-    average_rating = (df['white_rating'] + df['black_rating'])/2
-    quantis = quantil(all_rating_players, 3)
+    '''
+    Add two columns that separates the rating of the players with black and white pieces
+    (one column to each) in low, medium or high by equally divided quantiles
 
-    df['level_black_player'] = [
-    'low' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'high' 
-    for rating in df['black_rating']
-    ]
+    Parameters:
+    -------------
+    DataFrame being analyzed
+
+    Returns:
+    -------------
+    DataFrame with the series level_black_player and level_white_player added
     
-    df['level_white_player'] = [
-    'low' if rating < quantis[1] else 'medium' if rating < quantis[2] else 'high' 
-    for rating in df['white_rating']
-    ]
+    '''
+    try:
+        isinstance(df, pd.core.frame.DataFrame)
 
-    df['game_level'] = [
-        'low' if game_rating < quantis[1] else 'medium' if game_rating < quantis[2]
-        else 'high' for game_rating in average_rating
-    ]
+        all_rating_players = pd.concat([df['white_rating'], df['black_rating']], ignore_index=True)
+        all_rating_quantiles = quantile(all_rating_players, 3)
+
+        df['level_black_player'] = [
+        'low' if rating < all_rating_quantiles[1] else 'medium' if rating < all_rating_quantiles[2] else 'high' 
+        for rating in df['black_rating']
+        ]
         
-
-def quantil(dados, quantidade_divisão):
-    quantis = {}  
-    for i in range(0, quantidade_divisão):
-        quantis[i + 1] = np.percentile(dados, (100/quantidade_divisão)* (i + 1))
-    return quantis
-
+        df['level_white_player'] = [
+        'low' if rating < all_rating_quantiles[1] else 'medium' if rating < all_rating_quantiles[2] else 'high' 
+        for rating in df['white_rating']
+        ]
+        print(df)
+        return df
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the series (white_rating) and (black_rating)')
+        return None
+    except ValueError:
+        print('white_rating and black_rating must be of the same length')
+        return None
 
 
 
