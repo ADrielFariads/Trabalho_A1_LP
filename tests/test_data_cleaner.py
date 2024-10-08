@@ -106,7 +106,7 @@ class Test_add_black_white_level(unittest.TestCase):
         result = result.reset_index(drop = True)
 
         pd.testing.assert_frame_equal(example, result)
-        
+
 
 class Test_add_game_level(unittest.TestCase):
 
@@ -150,6 +150,67 @@ class Test_add_game_level(unittest.TestCase):
         result = result.reset_index(drop = True)
 
         pd.testing.assert_frame_equal(example, result)
+
+
+class Test_cut_short_games(unittest.TestCase):
+
+    def test_normal_case(self):
+
+        example_data = {
+            'turns': [1,2,3,20,35,55]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'turns': [3,20,35,55]  
+        }
+        result = pd.DataFrame(result_data)
+       
+        example = data_cleaner.cut_short_games(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+    
+    def test_only_short_games(self):
+
+        example_data = {
+            'turns': [1,1,2,2]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'turns': []  
+        }
+        result = pd.DataFrame(result_data)
+        
+        example = data_cleaner.cut_short_games(example).reset_index(drop = True)
+        result = int(result.reset_index(drop = True))
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_without_short_games(self):
+
+        example_data = {
+            'turns': [15,25,72,42,666]
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'turns': [15,25,72,42,666]  
+        }
+        result = pd.DataFrame(result_data)
+        
+        example = data_cleaner.cut_short_games(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+if __name__ == "__main__":
+    unittest.main()
+
 
 
 
