@@ -81,6 +81,44 @@ def add_black_white_level(df):
     except ValueError:
         print('white_rating and black_rating must be of the same length')
         return None
+    
+
+def add_game_level(df):
+    '''
+    Add the column game_level that separates the game level in low, medium and hard
+    calculated by averaging rating columns by divided equally quantiles
+
+    Parameters:
+    -------------
+    DataFrame being analyzed
+
+    Returns:
+    -------------
+    DataFreme with game_level series added
+    
+    '''
+    try:
+        isinstance(df, pd.core.frame.DataFrame)
+
+        average_rating = (df['white_rating'] + df['black_rating'])/2
+        avg_rating_quantiles = quantile(average_rating, 3)
+
+        df['game_level'] = [
+            'low' if game_rating < avg_rating_quantiles[1] else 'medium' if game_rating < avg_rating_quantiles[2]
+            else 'high' for game_rating in average_rating
+        ]
+        return df
+    
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the series (white_rating) and (black_rating)')
+        return None
+    except ValueError:
+        print('white_rating and black_rating must be of the same length')
+        return None
+    
 
 def quantile(data, number_of_divisions : int) -> set:
     '''
