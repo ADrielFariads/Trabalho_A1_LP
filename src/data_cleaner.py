@@ -5,8 +5,17 @@ import numpy as np
 df = pd.read_csv(Constants.Constants.path)
 
 def read_data_set():
-    df = pd.read_csv(Constants.Constants.path)
-    return df
+    '''
+    Reads the database and returns the dataframe
+    '''
+    try:
+
+        df = pd.read_csv(Constants.Constants.path)
+        return df
+    
+    except FileNotFoundError:
+        print('File not found, please enter a valid path')
+        return None
 
 def cut_short_games(df):
     '''
@@ -62,7 +71,6 @@ def add_black_white_level(df):
         'low' if rating < all_rating_quantiles[1] else 'medium' if rating < all_rating_quantiles[2] else 'high' 
         for rating in df['white_rating']
         ]
-        print(df)
         return df
     except TypeError:
         print('the argument is not a DataFrame')
@@ -73,6 +81,8 @@ def add_black_white_level(df):
     except ValueError:
         print('white_rating and black_rating must be of the same length')
         return None
+    
+
 
 
 
