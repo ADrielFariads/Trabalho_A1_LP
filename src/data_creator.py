@@ -7,6 +7,9 @@ import numpy as np
 import re
 import doctest
 
+import Constants
+
+df = pd.read_csv(Constants.Constants.path)
 
 def count_moves(game:str, piece:str) -> int:
     """
@@ -186,7 +189,26 @@ def piece_matrix(game:str, piece:str) -> np.array:
         return matrix
     except AssertionError:
         return None
-            
+
+def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
+    df = games
+    pieces = {
+    "pawn": [" a", " b", " c", " d", " e", " f", " g", " h"],
+    "king": "K",
+    "queen": "Q",
+    "knight": "N",
+    "bishop": "B",
+    "rook": "R"}
+    for piece in pieces.keys():
+        try:
+            df[f"{piece}_moves"] = df["moves"].apply(count_moves, piece = piece)
+            return df
+        except KeyError:
+            print("Houve um erro, selecione um nome válido de peça")
+            return None
+        
+        
+print(pieces_columns_generator(df))
 
     
 

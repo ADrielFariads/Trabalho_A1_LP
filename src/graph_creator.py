@@ -10,8 +10,11 @@ from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 
 
-
+import Constants
 import data_creator
+
+
+df = pd.read_csv(Constants.Constants.path)
 
 matriz = np.array([[1, 0, 0, 0, 2, 4, 3, 2],
        [1, 2, 1, 2, 0, 1, 0, 1],
@@ -58,6 +61,9 @@ def heat_map_generator(game_matriz:np.array) -> plt:
     ax.set_ylabel('', fontsize=12)
 
     return plt
+
+
+
 
 
 
