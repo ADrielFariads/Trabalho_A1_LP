@@ -2,7 +2,7 @@ import sys, os
 import pandas as pd
 import unittest
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..' , 'src')))
 
 import data_cleaner
 
@@ -39,6 +39,7 @@ class Test_add_black_white_level(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -60,6 +61,7 @@ class Test_add_black_white_level(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -81,6 +83,7 @@ class Test_add_black_white_level(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -89,19 +92,20 @@ class Test_add_black_white_level(unittest.TestCase):
     def test_white_equal_level(self):
 
         example_data = {
-            'black_rating': [1200,1200],
-            'white_rating': [1400,1600]
+            'black_rating': [1400,1600],
+            'white_rating': [1200,1200]
         }
         example = pd.DataFrame(example_data)
 
         result_data =  {
-            'black_rating': [1200,1200],
-            'white_rating': [1400,1200],
+            'black_rating': [1400,1600],
+            'white_rating': [1200,1200],
             'level_black_player' : ['high' , 'high'],
             'level_white_player' : ['medium' , 'medium']
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_black_white_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -125,6 +129,7 @@ class Test_add_game_level(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_game_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -146,6 +151,7 @@ class Test_add_game_level(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
 
+        #Removing the index for the test
         example = data_cleaner.add_game_level(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -166,7 +172,8 @@ class Test_cut_short_games(unittest.TestCase):
             'turns': [3,20,35,55]  
         }
         result = pd.DataFrame(result_data)
-       
+
+        #Removing the index for the test
         example = data_cleaner.cut_short_games(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
@@ -180,13 +187,14 @@ class Test_cut_short_games(unittest.TestCase):
         example = pd.DataFrame(example_data)
 
         result_data =  {
-
-            'turns': []  
+            'turns': []
         }
         result = pd.DataFrame(result_data)
         
+        #Removing the index and changing the type for the test
         example = data_cleaner.cut_short_games(example).reset_index(drop = True)
-        result = int(result.reset_index(drop = True))
+        result = result.reset_index(drop = True).astype('int64')
+
 
         pd.testing.assert_frame_equal(example, result)
 
@@ -203,7 +211,51 @@ class Test_cut_short_games(unittest.TestCase):
         }
         result = pd.DataFrame(result_data)
         
+        #Removing the index for the test
         example = data_cleaner.cut_short_games(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+class TestGame_Duration(unittest.TestCase):
+
+    def test_normal_case(self):
+        example_data = {
+           'turns': [10,20,30]
+        }
+
+        example = pd.DataFrame(example_data)
+        
+        result_data = {
+            'turns': [10,20,30],
+            'game_duration_in_turns': ['low','medium','high']
+        }
+
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.add_game_duration(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_equal_data(self):
+
+        example_data = {
+           'turns': [10,10,10]
+        }
+
+        example = pd.DataFrame(example_data)
+        
+        result_data = {
+            'turns': [10,10,10],
+            'game_duration_in_turns': ['high','high','high']
+        }
+
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.add_game_duration(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
         pd.testing.assert_frame_equal(example, result)
