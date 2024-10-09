@@ -13,15 +13,6 @@ import seaborn as sns
 
 import data_creator
 
-matriz = np.array([[1, 0, 0, 0, 2, 4, 3, 2],
-       [1, 2, 1, 2, 0, 1, 0, 1],
-       [0, 1, 1, 0, 1, 3, 2, 0],
-       [1, 0, 0, 1, 1, 0, 1, 2],
-       [0, 1, 0, 2, 1, 0, 2, 1],
-       [1, 0, 2, 1, 3, 1, 2, 5],
-       [0, 2, 1, 1, 2, 1, 1, 1],
-       [1, 1, 0, 3, 1, 4, 1, 0]])
-
 def heat_map_generator(game_matriz:np.array) -> plt:
     """
     Creates a plt of a heatmap, which represents how much each square is used in the game
@@ -42,7 +33,7 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     plt.figure(figsize=(8, 6), facecolor="gray")
 
-    cmap = LinearSegmentedColormap.from_list("white_to_red", ["gray", "orange", "red"])
+    cmap = LinearSegmentedColormap.from_list("white_to_red", ["white", "orange", "red"])
 
     ax = sns.heatmap(game_matriz, annot=False, cmap=cmap, cbar=True, linewidths=0, alpha=0.7)
     letter_squares = list("abcdefgh")
@@ -60,7 +51,7 @@ def heat_map_generator(game_matriz:np.array) -> plt:
     return plt
 
 
-
-heat_map_generator(matriz)
-plt.show()
+if __name__ == "__main__":
+    heat_map_generator(matriz)
+    plt.show()
 
