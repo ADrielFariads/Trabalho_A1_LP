@@ -49,9 +49,3 @@ def heat_map_generator(game_matriz:np.array) -> plt:
     ax.set_ylabel('', fontsize=12)
 
     return plt
-
-
-if __name__ == "__main__":
-    heat_map_generator(matriz)
-    plt.show()
-

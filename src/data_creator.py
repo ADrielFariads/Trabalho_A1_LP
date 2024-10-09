@@ -170,7 +170,7 @@ def piece_matrix(game:str, piece:str) -> np.array:
         moves = match_squares.split()
         
 
-        for each in moves:
+        for i,each in enumerate(moves):
             if piece == "pawn":
                 if len(each) == 2:  
                     row = 8 - int(each[1]) 
@@ -182,10 +182,27 @@ def piece_matrix(game:str, piece:str) -> np.array:
                     row = 8 - int(each[-1]) 
                     column = squares[each[-2]]
                     matrix[row][column] += 1
+                elif each == "0-0":
+                    if i % 2 == 1:
+                        matrix[7][6] += 1
+                        matrix[7][5] += 1
+                    else:
+                        matrix[0][6] += 1
+                        matrix[0][5] += 1
+                elif each == "O-O-O":
+                    if i % 2 == 1:
+                        matrix[7][2] += 1
+                        matrix[7][3] += 1
+                    else:
+                        matrix[0][2] += 1
+                        matrix[0][3] += 1
+
+
 
         return matrix
     except AssertionError:
         return None
+    
             
 
     
