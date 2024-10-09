@@ -46,4 +46,3 @@ def stock_fish(dic_list):
         
 
     
-
