@@ -9,7 +9,6 @@ df = data_cleaner.cut_short_games(df)
 games = game.game_info(df)
 game.stock_fish(games)
 
-print(df)
 
 
 
