@@ -6,6 +6,10 @@ import pandas as pd
 import numpy as np
 import re
 import doctest
+import json
+
+import Constants
+import data_cleaner
 
 
 def count_moves(game:str, piece:str) -> int:
@@ -123,7 +127,7 @@ def game_matrix(game:str) -> np.array:
 
 
                 
-            elif each[0] in squares.keys():
+            elif each[0] in squares.keys(): #usual moves
                 column = squares[each[0]]
                 row = 8 - int(each[-1])
                 matrix[row][column] += 1
@@ -186,9 +190,54 @@ def piece_matrix(game:str, piece:str) -> np.array:
         return matrix
     except AssertionError:
         return None
-            
 
-    
+def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
+    """
+    Creates columns for each piece's moves
+
+    Parameters:
+    ----------
+    game : pd.DataFrame
+         A data frame with chess' games, the DataFrame must have the column "moves", which is in algebric notation
+    Returns:
+    -------
+    pd.DataFrame
+         a dataframe with columns for each piece, each column contains the number of moves for that piece
+    """
+    df = games
+    pieces = {
+    "pawn": [" a", " b", " c", " d", " e", " f", " g", " h"],
+    "king": "K",
+    "queen": "Q",
+    "knight": "N",
+    "bishop": "B",
+    "rook": "R"}
+    for piece in pieces.keys():
+        try:
+            df[f"{piece}_moves"] = df["moves"].apply(count_moves, piece = piece)
+            return df
+        except KeyError:
+            print("Houve um erro, selecione um nome válido de peça")
+            return None
+        
+
+def advantage_column():
+    with open("data\\games.json", 'r') as file:
+        stockfish_data = json.load(file)
+
+    advantage = [game.get('avaliacoes', None) for game in stockfish_data]
+
+    df = data_cleaner.read_data_set()
+    df = data_cleaner.add_black_white_level(df)
+    df = data_cleaner.add_black_white_level(df)
+    df = data_cleaner.cut_short_games(df)
+    df = data_cleaner.add_game_level(df)
+    df['advantage'] = advantage
+    df = data_cleaner.cut_duplicates(df)
+
+    return df
+
+
 
 
 
