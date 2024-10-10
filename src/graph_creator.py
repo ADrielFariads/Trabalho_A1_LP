@@ -62,4 +62,11 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     return plt
 
+def view_boxplot(df):
+    sns.boxplot(data=df)
+    plt.title('Plays evaluate')
+    plt.ylabel('Values')
+    plt.xlabel('Level')
+    plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Medium', 'High'])
+    plt.show()
 
