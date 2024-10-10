@@ -6,10 +6,11 @@ import pandas as pd
 import numpy as np
 import re
 import doctest
+import json
 
 import Constants
+import data_cleaner
 
-df = pd.read_csv(Constants.Constants.path)
 
 def count_moves(game:str, piece:str) -> int:
     """
@@ -126,7 +127,7 @@ def game_matrix(game:str) -> np.array:
 
 
                 
-            elif each[0] in squares.keys():
+            elif each[0] in squares.keys(): #usual moves
                 column = squares[each[0]]
                 row = 8 - int(each[-1])
                 matrix[row][column] += 1
@@ -207,11 +208,30 @@ def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
             print("Houve um erro, selecione um nome válido de peça")
             return None
         
-        
-print(pieces_columns_generator(df))
+def advantage_column(dataframe, json_file):    
+        with open(json_file, 'r') as file:
+            stockfish_data = json.load(file)
 
-    
 
+        df = dataframe
+
+        # Suponha que o DataFrame tem uma coluna "id_partida" que corresponde às chaves do JSON.
+        # Adicionar a nova coluna "avaliações" ao DataFrame mapeando o ID da partida
+
+        df['advantage'] = df['id_partida'].map(lambda id_partida: stockfish_data.get(id_partida, {}).get('avaliações', None))
+
+with open("data\\games.json", 'r') as file:
+    stockfish_data = json.load(file)
+
+advantage = [game.get('avaliacoes', None) for game in stockfish_data]
+
+df = data_cleaner.read_data_set()
+df = data_cleaner.add_black_white_level(df)
+df = data_cleaner.add_black_white_level(df)
+df = data_cleaner.cut_short_games(df)
+df = data_cleaner.add_game_level(df)
+
+print(len(advantage), len(df))
 
 
 

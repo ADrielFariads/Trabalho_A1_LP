@@ -234,6 +234,20 @@ def add_game_duration(df):
 
 
 def resign_games_filter(df, resign=True):
+    '''
+    This function filters the DataFrame to show only resigned (or non resigned) games
+    
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+
+    resign=True: Bool
+
+    Returns:
+    ----------
+    DataFrame with only resigned or non resigned games
+
+    '''
     try:
         if resign == True:
             df = df[df["victory_status"]=="resign"]
@@ -245,7 +259,6 @@ def resign_games_filter(df, resign=True):
         print("an error occurred while filtering your dataframe")
         return None
 
-print(resign_games_filter(read_data_set()))
     
 
 
