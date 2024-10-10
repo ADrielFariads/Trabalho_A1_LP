@@ -230,8 +230,13 @@ df = data_cleaner.add_black_white_level(df)
 df = data_cleaner.add_black_white_level(df)
 df = data_cleaner.cut_short_games(df)
 df = data_cleaner.add_game_level(df)
+df['advantage'] = advantage
 
-print(len(advantage), len(df))
+print(type(df))
+df = data_cleaner.cut_duplicates(df)
+
+print(len(df))
+
 
 
 

@@ -36,7 +36,7 @@ def cut_duplicates(df):
     try:
         isinstance(df, pd.core.frame.DataFrame)
         
-        df = df.drop_duplicates()
+        df = df.drop_duplicates(subset=["moves"])
         return df
     except TypeError:
         print('the argument is not a DataFrame')
@@ -245,7 +245,7 @@ def resign_games_filter(df, resign=True):
 
     Returns:
     ----------
-    DataFrame with only resigned or non resigned games
+    DataFrame with only resigned or non resigned games 
 
     '''
     try:
