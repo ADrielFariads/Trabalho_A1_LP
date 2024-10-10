@@ -11,6 +11,7 @@ import seaborn as sns
 
 
 import Constants
+import data_cleaner
 import data_creator
 
 
@@ -62,11 +63,31 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     return plt
 
+def graph_advantagexrating(games:pd.DataFrame) -> plt:
+    df = games
+    df = data_creator.advantage_column()
+    df = data_cleaner.resign_games_filter(df, True)
+    df = df[df["rated"] == True] 
+
+    def final_value(list_target):
+        return list_target[-1]
+    
+    df["last_advantage"] = df["advantage"].apply(final_value)
+    df["rating_mean"] = (df["white_rating"] + df["black_rating"])/2
+
+    print(len(df))
+    
+
+    return df
+
+df = data_cleaner.read_data_set()
+df = data_cleaner.add_black_white_level(df)
+df = data_cleaner.cut_duplicates(df)
+df = data_cleaner.add_black_white_level(df)
+df = data_cleaner.cut_short_games(df)
+df = data_cleaner.add_game_level(df)
+
+graph_advantagexrating(df)
 
 
-
-
-
-heat_map_generator(matriz)
-plt.show()
 
