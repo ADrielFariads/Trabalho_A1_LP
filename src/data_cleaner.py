@@ -194,7 +194,7 @@ def add_game_duration(df):
         quantiles = quantile(turns, 3)
 
         df['game_duration_in_turns'] = [
-            'low' if turn < quantile[1] else 'medium' if turn < quantile[2]
+            'low' if turn < quantiles[1] else 'medium' if turn < quantiles[2]
             else 'high' for turn in turns
         ]
         return df
