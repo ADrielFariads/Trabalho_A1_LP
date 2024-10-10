@@ -26,7 +26,7 @@ def cut_duplicates(df):
 
     Parameters:
     --------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     --------------
@@ -48,7 +48,7 @@ def cut_short_games(df):
 
     Parameters:
     --------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     --------------
@@ -102,7 +102,7 @@ def add_black_white_level(df):
 
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     -------------
@@ -143,7 +143,7 @@ def add_game_level(df):
 
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     -------------
@@ -173,32 +173,6 @@ def add_game_level(df):
         return None
     
 
-def quantile(data, number_of_divisions : int) -> set:
-    '''
-    Calculates the quantiles of a data set for the desired number of divisions
-
-    Parameters:
-    -------------
-    data: numerical data set
-    number_of_divisions : int
-
-    Returns:
-    -------------
-    Dict with key equal the number of the quantile containing the quantiles
-    
-    '''
-    try:
-        isinstance(data[0], np.int64 | int | float)
-        isinstance(number_of_divisions, int)
-
-        quantis = {}  
-        for i in range(0, number_of_divisions-1):
-            quantis[i + 1] = np.percentile(data, (100/number_of_divisions)* (i + 1))
-        return quantis
-    
-    except TypeError:
-        print('The arguments are not valid')
-
 def add_game_duration(df):
     '''
     This function classifies the duration of the game into: low, medium and high
@@ -206,7 +180,7 @@ def add_game_duration(df):
     
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     ----------
@@ -258,11 +232,3 @@ def resign_games_filter(df, resign=True):
     except Exception:
         print("an error occurred while filtering your dataframe")
         return None
-
-    
-
-
-
-
-
- 
