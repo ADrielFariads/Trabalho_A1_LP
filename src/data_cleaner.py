@@ -258,6 +258,8 @@ def resign_games_filter(df, resign=True):
     except Exception:
         print("an error occurred while filtering your dataframe")
         return None
+    
+
 
     
 

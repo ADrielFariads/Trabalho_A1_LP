@@ -63,11 +63,11 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     return plt
 
-def graph_advantagexrating(games:pd.DataFrame) -> plt:
+def graph_advantage_before_resign(games:pd.DataFrame) -> plt:
     df = games
     df = data_creator.advantage_column()
-    df = data_cleaner.resign_games_filter(df, True)
     df = df[df["rated"] == True] 
+    df = df[df["game_level"] == "high"]
 
     def final_value(list_target):
         return list_target[-1]
@@ -75,9 +75,8 @@ def graph_advantagexrating(games:pd.DataFrame) -> plt:
     df["last_advantage"] = df["advantage"].apply(final_value)
     df["rating_mean"] = (df["white_rating"] + df["black_rating"])/2
 
-    print(len(df))
-    
-
+    sns.boxplot(data=df, x="age", y="class")
+    plt.show()
     return df
 
 df = data_cleaner.read_data_set()
@@ -87,7 +86,4 @@ df = data_cleaner.add_black_white_level(df)
 df = data_cleaner.cut_short_games(df)
 df = data_cleaner.add_game_level(df)
 
-graph_advantagexrating(df)
-
-
-
+graph_advantage_before_resign(df)
