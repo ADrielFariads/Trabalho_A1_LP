@@ -205,8 +205,8 @@ def add_game_duration(df):
     except KeyError:
         print('The DataFrame does not have the turns series')
         return None
-
-
+    
+    
 def resign_games_filter(df, resign=True):
     '''
     This function filters the DataFrame to show only resigned (or non resigned) games
