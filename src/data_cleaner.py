@@ -6,7 +6,6 @@ import pandas as pd
 import Constants
 import numpy as np
 
-df = pd.read_csv(Constants.Constants.path)
 
 def read_data_set():
     '''
@@ -212,9 +211,19 @@ def add_game_duration(df):
         return None
 
 
+def resign_games_filter(df, resign=True):
+    try:
+        if resign == True:
+            df = df[df["victory_status"]=="resign"]
+            return df
+        else:
+            df = df[df["victory_status"]!="resign"]
+            return df
+    except Exception:
+        print("an error occurred while filtering your dataframe")
+        return None
 
-
-
+print(resign_games_filter(read_data_set()))
     
 
 
