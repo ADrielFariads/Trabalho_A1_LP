@@ -63,10 +63,3 @@ def heat_map_generator(game_matriz:np.array) -> plt:
     return plt
 
 
-
-
-
-
-heat_map_generator(matriz)
-plt.show()
-

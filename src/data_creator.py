@@ -220,17 +220,6 @@ def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
             print("Houve um erro, selecione um nome válido de peça")
             return None
         
-def advantage_column(dataframe, json_file):    
-        with open(json_file, 'r') as file:
-            stockfish_data = json.load(file)
-
-
-        df = dataframe
-
-        # Suponha que o DataFrame tem uma coluna "id_partida" que corresponde às chaves do JSON.
-        # Adicionar a nova coluna "avaliações" ao DataFrame mapeando o ID da partida
-
-        df['advantage'] = df['id_partida'].map(lambda id_partida: stockfish_data.get(id_partida, {}).get('avaliações', None))
 
 def advantage_column():
     with open("data\\games.json", 'r') as file:
