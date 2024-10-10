@@ -6,7 +6,6 @@ import pandas as pd
 import Constants
 import numpy as np
 
-df = pd.read_csv(Constants.Constants.path)
 
 def read_data_set():
     '''
@@ -37,7 +36,7 @@ def cut_duplicates(df):
     try:
         isinstance(df, pd.core.frame.DataFrame)
         
-        df = df.drop_duplicates()
+        df = df.drop_duplicates(subset=["moves"])
         return df
     except TypeError:
         print('the argument is not a DataFrame')
@@ -234,8 +233,31 @@ def add_game_duration(df):
         return None
 
 
+def resign_games_filter(df, resign=True):
+    '''
+    This function filters the DataFrame to show only resigned (or non resigned) games
+    
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
 
+    resign=True: Bool
 
+    Returns:
+    ----------
+    DataFrame with only resigned or non resigned games 
+
+    '''
+    try:
+        if resign == True:
+            df = df[df["victory_status"]=="resign"]
+            return df
+        else:
+            df = df[df["victory_status"]!="resign"]
+            return df
+    except Exception:
+        print("an error occurred while filtering your dataframe")
+        return None
 
     
 
