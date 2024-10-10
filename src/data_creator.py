@@ -192,6 +192,18 @@ def piece_matrix(game:str, piece:str) -> np.array:
         return None
 
 def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
+    """
+    Creates columns for each piece's moves
+
+    Parameters:
+    ----------
+    game : pd.DataFrame
+         A data frame with chess' games, the DataFrame must have the column "moves", which is in algebric notation
+    Returns:
+    -------
+    pd.DataFrame
+         a dataframe with columns for each piece, each column contains the number of moves for that piece
+    """
     df = games
     pieces = {
     "pawn": [" a", " b", " c", " d", " e", " f", " g", " h"],
@@ -236,7 +248,6 @@ def advantage_column():
 
     return df
 
-print(advantage_column())
 
 
 
