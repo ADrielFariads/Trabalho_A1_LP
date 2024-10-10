@@ -70,3 +70,51 @@ def view_boxplot(df):
     plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Medium', 'High'])
     plt.show()
 
+def stacked_column_graph(df):
+    '''
+    Create a stacked column chart that analyzes each player's probability of winning (black or white) 
+    related to the duration of the game in turns (low, medium and high)
+    with the count of occurrences in each block
+
+    Parameters:
+    -------------
+    DataFrame being analyzed: pd.DataFrame
+
+    Returns:
+    ----------
+    Create the stacked column graph
+
+    '''
+    try:
+        isinstance(df, pd.core.frame.DataFrame)
+
+        print(df.columns)
+        count = df.groupby(['game_duration_in_turns', 'winner']).size().unstack(fill_value=0)
+
+        #Calculate percentage
+        percentage = count.div(count.sum(axis=1), axis=0) * 100
+
+        ax = percentage.plot(kind='bar', stacked=True)
+
+        #Add count labels
+        for i in range(len(percentage)):
+            for j in range(len(percentage.columns)):
+                count = count.iloc[i, j]
+                #Centers the labels in the middle of the bar
+                height = percentage.iloc[i, :j + 1].sum() - (percentage.iloc[i, j] / 2)
+                ax.text(i, height, str(count), ha='center', va='center', color='white')
+
+        #Graph settings
+        plt.title('Porcentagem de Vitórias por Duração do Jogo')
+        plt.ylabel('Porcentagem (%)')
+        plt.xlabel('Duração do Jogo')
+        plt.legend(title='Vencedor' , loc = 'upper right')
+        plt.ylim(0, 100)  
+        plt.show()
+
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the game_duration_in_turns and/or winner series')
+        return None
