@@ -206,7 +206,7 @@ def add_game_duration(df):
         print('The DataFrame does not have the turns series')
         return None
     
-    
+
 def resign_games_filter(df, resign=True):
     '''
     This function filters the DataFrame to show only resigned (or non resigned) games
@@ -232,6 +232,32 @@ def resign_games_filter(df, resign=True):
     except Exception:
         print("an error occurred while filtering your dataframe")
         return None
+    
+def mate_games_filter(df):
+    '''
+    This function filters the DataFrame to show mate-only win games
+    
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+
+    Returns:
+    ----------
+    Dataframe with mate-only win
+    '''
+
+    try:
+
+        isinstance(df, pd.core.frame.DataFrame)
+        df = df[df['victory_status'] == 'mate']
+
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the victory_status series')
+        return None
+    
     
 def desv_pad_evaluate(games):
     desv_medium_reviews = []
