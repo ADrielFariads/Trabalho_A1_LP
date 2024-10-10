@@ -11,7 +11,8 @@ df = data_cleaner.cut_short_games(df)
 df = data_cleaner.add_game_level(df)
 
 games = game.game_info(df)
-game.stock_fish(games)
+games = game.stock_fish(games)
+data.desv_pad_evaluate(games)
 
 
 

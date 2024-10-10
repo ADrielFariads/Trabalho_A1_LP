@@ -232,3 +232,22 @@ def resign_games_filter(df, resign=True):
     except Exception:
         print("an error occurred while filtering your dataframe")
         return None
+    
+def desv_pad_evaluate(games):
+    desv_medium_reviews = []
+    desv_high_reviews = []
+    desv_low_reviews = []
+    for game in games:
+        if game["level"] == "medium":
+            desv_medium_reviews.append(np.std(game["avaliacoes"]))
+        elif game["level"] == "high":
+            desv_high_reviews.append(np.std(game["avaliacoes"]))
+        else:
+            desv_low_reviews.append(np.std(game["avaliacoes"]))
+    desvs = {
+        "Low": sum(desv_low_reviews)/len(desv_low_reviews),
+        "Medium" : sum(desv_medium_reviews)/len(desv_medium_reviews),
+        "High": sum(desv_high_reviews)/len(desv_high_reviews)
+        }
+    view_boxplot({"Low": desv_low_reviews, "Medium": desv_medium_reviews, "High": desv_high_reviews})    
+
