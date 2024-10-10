@@ -20,6 +20,28 @@ def read_data_set():
         print('File not found, please enter a valid path')
         return None
 
+def cut_duplicates(df):
+    '''
+    Cuts lines with exact copies
+
+    Parameters:
+    --------------
+    DataFrame being analyzed
+
+    Returns:
+    --------------
+    The DataFrame without duplicates
+    
+    '''
+    try:
+        isinstance(df, pd.core.frame.DataFrame)
+        
+        df = df.drop_duplicates()
+        return df
+    except TypeError:
+        print('the argument is not a DataFrame')
+        return None
+
 def cut_short_games(df):
     '''
     Cut the games that have less than three turns
