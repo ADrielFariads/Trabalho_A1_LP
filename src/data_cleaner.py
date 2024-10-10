@@ -139,7 +139,7 @@ def add_black_white_level(df):
 
 def add_game_level(df):
     '''
-    Add the column game_level that separates the game level in low, medium and hard
+    Add the column game_level that separates the game level in low, medium and high
     calculated by averaging rating columns by divided equally quantiles
 
     Parameters:
@@ -148,7 +148,7 @@ def add_game_level(df):
 
     Returns:
     -------------
-    DataFreme with game_level series added
+    DataFrame with game_level series added
     
     '''
     try:
