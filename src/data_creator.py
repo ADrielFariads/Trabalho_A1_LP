@@ -220,22 +220,24 @@ def advantage_column(dataframe, json_file):
 
         df['advantage'] = df['id_partida'].map(lambda id_partida: stockfish_data.get(id_partida, {}).get('avaliações', None))
 
-with open("data\\games.json", 'r') as file:
-    stockfish_data = json.load(file)
+def advantage_column():
+    with open("data\\games.json", 'r') as file:
+        stockfish_data = json.load(file)
 
-advantage = [game.get('avaliacoes', None) for game in stockfish_data]
+    advantage = [game.get('avaliacoes', None) for game in stockfish_data]
 
-df = data_cleaner.read_data_set()
-df = data_cleaner.add_black_white_level(df)
-df = data_cleaner.add_black_white_level(df)
-df = data_cleaner.cut_short_games(df)
-df = data_cleaner.add_game_level(df)
-df['advantage'] = advantage
+    df = data_cleaner.read_data_set()
+    df = data_cleaner.add_black_white_level(df)
+    df = data_cleaner.add_black_white_level(df)
+    df = data_cleaner.cut_short_games(df)
+    df = data_cleaner.add_game_level(df)
+    df['advantage'] = advantage
+    df = data_cleaner.cut_duplicates(df)
 
-print(type(df))
-df = data_cleaner.cut_duplicates(df)
+    return df
 
-print(len(df))
+print(advantage_column())
+
 
 
 
