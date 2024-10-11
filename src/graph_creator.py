@@ -8,7 +8,7 @@ import doctest
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
-
+import data_cleaner
 
 import Constants
 import data_creator
@@ -86,10 +86,13 @@ def stacked_column_graph(df):
 
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
 
-        print(df.columns)
-        count = df.groupby(['game_duration_in_turns', 'winner']).size().unstack(fill_value=0)
+        #organizing the categories in order
+        df['game_duration_in_turns'] = pd.Categorical(
+            df['game_duration_in_turns'], categories=['low', 'medium', 'high'], ordered= True)
+                                                       
+        count = df.groupby(['game_duration_in_turns', 'winner'], observed = True).size().unstack(fill_value=0)
 
         #Calculate percentage
         percentage = count.div(count.sum(axis=1), axis=0) * 100
@@ -99,22 +102,25 @@ def stacked_column_graph(df):
         #Add count labels
         for i in range(len(percentage)):
             for j in range(len(percentage.columns)):
-                count = count.iloc[i, j]
+                current_count = count.iloc[i, j]
                 #Centers the labels in the middle of the bar
                 height = percentage.iloc[i, :j + 1].sum() - (percentage.iloc[i, j] / 2)
-                ax.text(i, height, str(count), ha='center', va='center', color='white')
+                ax.text(i, height, str(current_count), ha='center', va='center', color='white')
 
         #Graph settings
-        plt.title('Porcentagem de Vitórias por Duração do Jogo')
-        plt.ylabel('Porcentagem (%)')
-        plt.xlabel('Duração do Jogo')
-        plt.legend(title='Vencedor' , loc = 'upper right')
+        plt.title('Win percentage by turn-based game duration',fontweight='bold')
+        plt.ylabel('Percentage (%)', fontweight='bold')
+        plt.xlabel('Game duration', fontweight='bold')
+        plt.xticks(rotation=0)
+        plt.legend(title='Winner' , loc = 'upper right',fontsize='small', borderpad=0.1)
         plt.ylim(0, 100)  
         plt.show()
 
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
     except KeyError:
         print('The DataFrame does not have the game_duration_in_turns and/or winner series')
         return None
+
+
