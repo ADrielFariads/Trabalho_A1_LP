@@ -1,3 +1,4 @@
+import os
 import chess
 import pandas as pd
 import chess.engine
@@ -51,7 +52,6 @@ def evaluate_games(games, motor, time, depth):
     """
     games_num = 0
     for game in games:
-        print(game)
         for movimento in game["notation"]:
             game["board"].push_san(movimento)
             try:
@@ -74,7 +74,7 @@ def evaluate_games(games, motor, time, depth):
     
     
 
-def stock_fish(dic_list):
+def stockfish(dic_list):
     """
     Starts stockfish and calls another function to evaluate the games or returns the games evaluated at the desired depth.
 
@@ -90,17 +90,17 @@ def stock_fish(dic_list):
 
     """
     while True:
-        use_stockfish = input("Do you want to use Stockfish? (Y/N)") 
+        use_stockfish = input("Do you want to use Stockfish? (Y/N): \n") 
         if(use_stockfish == "Y" or use_stockfish == "y"):
             while True:                
                 try:
-                    depth = int(input("What is the depth of analysis desired?? (1-99)"))
-                    time = int(input("time for position analysis? (0.01-20)"))
+                    depth = int(input("What is the depth of analysis desired?? (1-99): \n"))
+                    time = int(input("time for position analysis? (0.01-20): \n"))
                     if(depth < 0.01 or depth > 99):
-                        print("Invalid number entered!! Enter a number from 1 to 99")
+                        print("Invalid number entered!! Enter a number from 1 to 99\n")
                         continue
                     elif (time < 0.01 or time > 20):
-                        print("Invalid number entered!! Enter a number from 0.01 to 20")
+                        print("Invalid number entered!! Enter a number from 0.01 to 20\n")
                         continue
                     else:
                         try:
@@ -108,17 +108,20 @@ def stock_fish(dic_list):
                             with engine as motor:
                                 return evaluate_games(dic_list, motor, time, depth)  # Passes the engine as an argument
                         except chess.engine.EngineTerminatedError as error:
-                                print(f"Couldn't start the engine: {error}")
+                                print(f"Couldn't start the engine: {error}\n")
                                 sys.exit(1)
                         except FileNotFoundError as error:
-                            print(f"Path given to stockfish invalid: {error}")
+                            print(f"Path given to stockfish invalid: {error}\n")
+                            sys.exit(1)
+                        except OSError:
+                            print(f"Insert a path in Constants.py\n")
                             sys.exit(1)
                 except ValueError:
-                        print("Invalid caracter entered!!")
+                        print("Invalid caracter entered!!\n")
                         continue
         elif (use_stockfish) == "N" or use_stockfish == "n":
             try:
-                with open("games.json", "r") as file:
+                with open(os.path.join(os.getcwd() , "data", "games.json"), "r") as file:
                     games = json.load(file) # Loads the pre-processed data
                     return games        
             except FileNotFoundError:

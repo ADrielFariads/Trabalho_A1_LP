@@ -4,14 +4,12 @@ Functions for graphs and visual features
 
 import pandas as pd
 import numpy as np
-import doctest
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 import data_cleaner
 
 import Constants
-import data_creator
 
 
 df = pd.read_csv(Constants.Constants.path)
@@ -62,13 +60,16 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     return plt
 
-def view_boxplot(df):
-    sns.boxplot(data=df)
+def view_boxplot(desvs, desvs_mean):
+    sns.boxplot(data=desvs,fliersize=0)
     plt.title('Plays evaluate')
     plt.ylabel('Values')
     plt.xlabel('Level')
     plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Medium', 'High'])
+    info_extra = f'Low: {desvs_mean["Low"]:.2f}\nMedium: {desvs_mean["Medium"]:.2f}\nHigh: {desvs_mean["High"]:.2f}'
+    plt.legend([info_extra], loc='upper right', fontsize='small', frameon=True, title="Standard deviation")
     plt.show()
+
 
 def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration') -> plt:
     '''
