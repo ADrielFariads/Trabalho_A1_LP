@@ -30,4 +30,7 @@ Once you have installed and cloned the repository, you can run the `main.py` fil
 python main.py
 ```
 
+## Result
+Once executed, `main.py` generates the graphs used in the analysis of the work and updates the dataset with the changes made. the graphs can be found in the `graphs` folder, while the resulting dataframe will be in the `data` folder 
+
 
