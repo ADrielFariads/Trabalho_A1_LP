@@ -135,7 +135,40 @@ def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration')
         print('The DataFrame does not have the game_duration_in_turns and/or winner series')
         return None
 
-df = data_cleaner.add_game_duration(df)
-white_advantage_graph = stacked_column_graph(df)
-df = data_cleaner.mate_games_filter(df)
-mate_white_advantage_graph = stacked_column_graph(df ,'Mate win Percentage by Turn-based Game Duration')
+def violin_plot(df:pd.DataFrame, rated_games_only:bool=False) -> plt:
+    '''
+    Creates a violin plot that represents the frequency of games ended for each possible kind.
+
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+            DataFrame being analyzed.
+
+    rated_games_only:bool
+        a bool refering whether you want to filter only rated games or not
+
+
+
+    Returns:
+    ----------
+     violin plot 
+
+    '''
+    df = df[df["victory_status"] != "draw"]
+    if rated_games_only == True:
+        df = df[df["rated"] == True]
+
+    df["mean_rating"] = (df["white_rating"] + df["black_rating"])/2
+    sns.violinplot(x='victory_status', y='mean', data=df)
+    plt.ylabel('mean rating of players', fontweight='bold')
+    plt.xlabel('type of defeat', fontweight='bold')
+    if rated_games_only == True:
+        plt.title("Rated games' type of defeat", fontweight='bold')
+    else: 
+        plt.title("All games' type of defeat", fontweight='bold')
+
+    return plt
+
+
+
+

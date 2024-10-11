@@ -5,7 +5,6 @@ Module that clean data and create new insights
 import pandas as pd
 import Constants
 import numpy as np
-import graph_creator
 
 
 def read_data_set():
