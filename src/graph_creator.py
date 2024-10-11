@@ -143,16 +143,14 @@ def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration')
         #Graph settings
         plt.title(title,fontweight='bold')
         plt.ylabel('Percentage (%)', fontweight='bold')
-        plt.xlabel('Game duration', fontweight='bold')
+        plt.xlabel('Turn Count', fontweight='bold')
         plt.xticks(rotation=0)
         plt.legend(title='Winner' , loc = 'upper right',fontsize='small', borderpad=0.2)
         plt.ylim(0, 100)
         plt.tight_layout() 
 
-        return plt
+        return plt        
         
-        
-
     except AssertionError:
         print('The arguments are not valid')
         return None
