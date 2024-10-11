@@ -7,7 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
-import data_cleaner
 
 import Constants
 
@@ -60,16 +59,40 @@ def heat_map_generator(game_matriz:np.array) -> plt:
 
     return plt
 
-def view_boxplot(desvs, desvs_mean):
+def boxplot_deviation_reviews(desvs, desvs_mean):
+    plt.figure(1)
     sns.boxplot(data=desvs,fliersize=0)
-    plt.title('Plays evaluate')
+    plt.title('Avarage plays standard deviation')
     plt.ylabel('Values')
     plt.xlabel('Level')
     plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Medium', 'High'])
     info_extra = f'Low: {desvs_mean["Low"]:.2f}\nMedium: {desvs_mean["Medium"]:.2f}\nHigh: {desvs_mean["High"]:.2f}'
     plt.legend([info_extra], loc='upper right', fontsize='small', frameon=True, title="Standard deviation")
-    plt.show()
+    return plt
 
+def boxplot_all_games_reviews(games):
+    review_low = []
+    review_medium = []
+    review_high = []
+    for game in games:
+        if game["level"] == "medium":
+            for review in game["reviews"]:
+                review_medium.append(review)
+        elif game["level"] == "high":
+            for review in game["reviews"]:
+                review_high.append(review)
+        else:
+            for review in game["reviews"]:
+                review_low.append(review)
+
+    reviews = {"Low": review_low, "Medium": review_medium, "High": review_high}
+    plt.figure(2)
+    sns.boxplot(data=reviews)
+    plt.title('Plays evaluate')
+    plt.ylabel('Values')
+    plt.xlabel('Level')
+    plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Medium', 'High'])
+    return plt
 
 def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration') -> plt:
     '''
@@ -219,5 +242,7 @@ def rating_resign_graph(df:pd.DataFrame):
     except KeyError:
         print('The DataFrame is missing one or more of the following series: rank, game level, and win status')
         return None
+
+
 
 
