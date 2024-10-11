@@ -27,6 +27,7 @@ Then you can clone the repository
 
 ### Stockfish configuration
 After that, you have to choose whether you want to use stockfish's engine or not. if so, you need to insert the path to the stockfish executable file in the location indicated in `src/Constants.py`.
+More formal information about stockfish can be found at [Stockfish Official Documentation](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
 
 
 ## Using the project
