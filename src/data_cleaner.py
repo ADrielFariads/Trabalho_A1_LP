@@ -255,6 +255,7 @@ def mate_games_filter(df):
 
         assert isinstance(df, pd.core.frame.DataFrame)
         df = df[df['victory_status'] == 'mate']
+        return df
 
     except AssertionError:
         print('The argument is not a DataFrame')
