@@ -13,5 +13,21 @@ As previously mentioned, the data set contains chess games played at https://lic
 * **src**: The source directory, contains most of the project funcions.
 * **tests**: Test directory, used to test the funcions of **src**.
 
- ## Using this project
- First of all, be sure you have the last version of all requiriments
+ ## Instaling this project
+ First of all, be sure you have installed compatible versions of the libraries used. The versions we used are avaiable in `requiriments.txt`
+
+ ```python
+    pip install -r requiriments.txt
+```
+Then you can clone the repository
+```bash
+   git clone https://github.com/ADrielFariads/Trabalho_A1_LP.git
+```
+
+## Using the project
+Once you have installed and cloned the repository, you can run the `main.py` file.
+```bash
+python main.py
+```
+
+
