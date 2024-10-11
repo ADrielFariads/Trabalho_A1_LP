@@ -2,7 +2,6 @@ import unittest
 import chess
 import pandas as pd
 import game
-import chess
 import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'games.csv')))
