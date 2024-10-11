@@ -219,19 +219,14 @@ def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
             return None
         
 
-def advantage_column():
+def advantage_column(df):
     with open("data\\games.json", 'r') as file:
         stockfish_data = json.load(file)
 
     advantage = [game.get('avaliacoes', None) for game in stockfish_data]
 
-    df = data_cleaner.read_data_set()
-    df = data_cleaner.add_black_white_level(df)
-    df = data_cleaner.add_black_white_level(df)
     df = data_cleaner.cut_short_games(df)
-    df = data_cleaner.add_game_level(df)
-    df['advantage'] = advantage
-    df = data_cleaner.cut_duplicates(df)
+    df.loc[:, 'advantage'] = advantage
 
     return df
 
@@ -273,8 +268,6 @@ def desvpad_evaluate(games):
         "High": sum(desv_high_reviews)/len(desv_high_reviews)
         }
     return desvs, desvs_mean
-
-
 
 
 

@@ -7,10 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
-
+import data_cleaner
 
 import Constants
-import data_creator
 
 
 df = pd.read_csv(Constants.Constants.path)
@@ -72,3 +71,71 @@ def view_boxplot(desvs, desvs_mean):
     plt.show()
 
 
+def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration') -> plt:
+    '''
+    Create a stacked column chart that analyzes each player's probability of winning (black or white) 
+    related to the duration of the game in turns (low, medium and high)
+    with the dcount of occurrences in each block
+
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+            DataFrame being analyzed.
+
+    title: str
+            Title for the graph.
+
+    Returns:
+    ----------
+    Create the stacked column graph
+
+    '''
+    try:
+        assert isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(title, str)
+
+        #organizing the categories in order
+        df['game_duration_in_turns'] = pd.Categorical(
+            df['game_duration_in_turns'], categories=['low', 'medium', 'high'], ordered= True)
+                                                       
+        count = df.groupby(['game_duration_in_turns', 'winner'], observed = True).size().unstack(fill_value=0)
+
+        #Calculate percentage
+        percentage = count.div(count.sum(axis=1), axis=0) * 100
+
+        plt.style.use('ggplot')
+
+        ax = percentage.plot(kind='bar', stacked=True)
+
+        #Add count labels
+        for i in range(len(percentage)):
+            for j in range(len(percentage.columns)):
+                current_count = count.iloc[i, j]
+                #Centers the labels in the middle of the bar
+                height = percentage.iloc[i, :j + 1].sum() - (percentage.iloc[i, j] / 2)
+                ax.text(i, height, str(current_count), ha='center', va='center', color='white')
+
+        #Graph settings
+        plt.title(title,fontweight='bold')
+        plt.ylabel('Percentage (%)', fontweight='bold')
+        plt.xlabel('Game duration', fontweight='bold')
+        plt.xticks(rotation=0)
+        plt.legend(title='Winner' , loc = 'upper right',fontsize='small', borderpad=0.2)
+        plt.ylim(0, 100)
+        plt.tight_layout() 
+
+        return plt
+        
+        
+
+    except AssertionError:
+        print('The arguments are not valid')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the game_duration_in_turns and/or winner series')
+        return None
+
+df = data_cleaner.add_game_duration(df)
+white_advantage_graph = stacked_column_graph(df)
+df = data_cleaner.mate_games_filter(df)
+mate_white_advantage_graph = stacked_column_graph(df ,'Mate win Percentage by Turn-based Game Duration')
