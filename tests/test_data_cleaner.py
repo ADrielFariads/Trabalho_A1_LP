@@ -1,7 +1,6 @@
 import sys, os
 import pandas as pd
 import unittest
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..' , 'src')))
 
 import data_cleaner
@@ -219,6 +218,7 @@ class Test_cut_short_games(unittest.TestCase):
 
 class TestGame_Duration(unittest.TestCase):
 
+
     def test_normal_case(self):
         example_data = {
            'turns': [10,20,30]
@@ -256,6 +256,75 @@ class TestGame_Duration(unittest.TestCase):
 
         #Removing the index for the test
         example = data_cleaner.add_game_duration(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+class test_cut_duplicates(unittest.TestCase):
+    def test_normal_case(self):
+
+        example_data = {
+            'moves': [1,2,2,3,3,4,5],
+
+            'other_serie':['a','b','b','c','c','d','e']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'moves': [1,2,3,4,5],
+
+            'other_serie':['a','b','c','d','e']
+
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.cut_duplicates(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+    
+    def test_only_duplicate_games(self):
+
+        example_data = {
+            'moves': [1,1,1,1,1,1],
+
+            'other_serie':['a','a','a','a','a','a']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'moves': [1],
+
+            'other_serie':['a'] 
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.cut_duplicates(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_without_duplicate_games(self):
+
+        example_data = {
+            'moves': [1,2,3,4,5],
+            'other_serie':['a','b','c','d','e']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'moves': [1,2,3,4,5],
+            'other_serie':['a','b','c','d','e']  
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.cut_duplicates(example).reset_index(drop = True)
         result = result.reset_index(drop = True)
 
         pd.testing.assert_frame_equal(example, result)
