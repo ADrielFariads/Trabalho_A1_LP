@@ -87,7 +87,9 @@ def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration')
 
     Returns:
     ----------
-    Create the stacked column graph
+    plt
+        The graph plot object
+
 
     '''
     try:
@@ -169,6 +171,53 @@ def violin_plot(df:pd.DataFrame, rated_games_only:bool=False) -> plt:
 
     return plt
 
+def rating_resign_graph(df:pd.DataFrame):
+    '''
+    This function creates a bar graph which represents:
+    the number of resigns (y-axis) by match level:
+    (low, medium or high) on the x-axis.
 
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+            DataFrame being analyzed.
+
+    Returns:
+    ----------
+    plt
+        The graph plot object
+    
+    '''
+    try:
+        assert isinstance(df, pd.core.frame.DataFrame)
+        
+        only_rated_matches = df[df['rated'] == True]
+        resign_df = only_rated_matches[only_rated_matches['victory_status'] == 'resign']
+        
+
+        # Count number of matches by rating level
+        count_df = resign_df['game_level'].value_counts().reset_index()
+        count_df.columns = ['game_level', 'count']
+        
+        sns.set_style("darkgrid")
+        # Creates the bar graph
+        plt.figure(figsize=(8, 5))
+        sns.barplot(data=count_df, x='game_level', y='count',  hue='game_level', palette='viridis')
+
+        # Graph settings
+        plt.title('Number of Matches Ended by Resign by Ranking Level', fontweight='bold')
+        plt.xlabel('Classification Level', fontweight='bold')
+        plt.ylabel('Number of Matches', fontweight='bold')
+        plt.xticks(rotation=0)
+        plt.tight_layout()
+
+        return plt
+
+    except AssertionError:
+        print('The argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame is missing one or more of the following series: rank, game level, and win status')
+        return None
 
 
