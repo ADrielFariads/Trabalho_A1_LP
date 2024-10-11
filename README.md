@@ -38,7 +38,7 @@ python main.py
 ### Stockfish use
 
 If you are going to use the stockfish's engine, choose the depth of the engine's analisys.
-##foto do terminal##
+![stock_fish_terminal_config](data/readme_images/terminal_image_stockfish_config.jpg)
 
 
 It should be noted that as it is an external program, the results may differ from the analysis carried out in the first instance. if you run a new stockfish 's analysis, the data and graphs generateds may slightly differ from the original ones. Furthermore, realize that the engine analysis has exponential complexity in relation to depth, which means that a small increase in depth drastically increases the program's response time. You can check the number of games already analyzed by the counter in the terminal.
