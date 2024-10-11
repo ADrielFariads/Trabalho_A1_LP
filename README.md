@@ -19,10 +19,15 @@ As previously mentioned, the data set contains chess games played at https://lic
  ```python
     pip install -r requiriments.txt
 ```
+
 Then you can clone the repository
 ```bash
    git clone https://github.com/ADrielFariads/Trabalho_A1_LP.git
 ```
+
+### Stockfish configuration
+After that, you have to choose whether you want to use stockfish's engine or not. if so, you need to insert the path to the stockfish executable file in the location indicated in `src/Constants.py`.
+
 
 ## Using the project
 Once you have installed and cloned the repository, you can run the `main.py` file.
@@ -30,7 +35,33 @@ Once you have installed and cloned the repository, you can run the `main.py` fil
 python main.py
 ```
 
+### Stockfish use
+
+If you are going to use the stockfish's engine, choose the depth of the engine's analisys.
+##foto do terminal##
+
+
+It should be noted that as it is an external program, the results may differ from the analysis carried out in the first instance. if you run a new stockfish 's analysis, the data and graphs generateds may slightly differ from the original ones. Furthermore, realize that the engine analysis has exponential complexity in relation to depth, which means that a small increase in depth drastically increases the program's response time. You can check the number of games already analyzed by the counter in the terminal.
+
+
+
 ## Result
-Once executed, `main.py` generates the graphs used in the analysis of the work and updates the dataset with the changes made. the graphs can be found in the `graphs` folder, while the resulting dataframe will be in the `data` folder.
+Once executed, `main.py` generates the graphs used in the analysis of the work and updates the dataset with the changes made. the graphs can be found in the `graphs` folder, while the resulting dataframe will be in the `data` folder. We remind you once again that, if you performed a new analysis of stockfish, the data returned may differ from that found in the `graphs` and, consequently, result in different graphs.
+
+## Tests
+
+You can run the files in `tests` folders to test the modules in `src`.
+
+```bash
+python -m unittest discover -s tests -p "*.py"
+```
+
+
+
+
+
+
+
+
 
 
