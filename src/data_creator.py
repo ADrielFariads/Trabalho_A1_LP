@@ -186,6 +186,9 @@ def piece_matrix(game:str, piece:str) -> np.array:
                     matrix[row][column] += 1
 
         return matrix
+    except KeyError:
+        print("the piece key is not valid, try another one.")
+        return None
     except AssertionError:
         return None
 

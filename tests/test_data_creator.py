@@ -1,6 +1,7 @@
 import sys, os
 import unittest
 import numpy as np
+import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
@@ -112,6 +113,39 @@ class Test_game_matrix(unittest.TestCase):
         self.assertEqual(result, None)
 
 
+class Test_piece_matrix(unittest.TestCase):
+    def test_common_moves_pawn(self):
+        example = "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6"
+        result = data_creator.piece_matrix(example, "pawn")
+        expected_result = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+       [1, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0]])
+        np.testing.assert_equal(result, expected_result)
+
+    def test_common_moves_knight(self):
+        example = "e4 e5 Nf3 d4 Bb5 a6 Ba4 Nf6"
+        result = data_creator.piece_matrix(example, "knight")
+        expected_result = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0]])
+        np.testing.assert_equal(result, expected_result)
+        
+    def test_not_a_valid_game_piece(self):
+        example = "e4 e5 Nf3 d4 Bb5 a6 Ba4 Nf6"
+        result = data_creator.piece_matrix(example, "cavalo")
+        self.assertEqual(result, None)
+        
+        
 
 
 
