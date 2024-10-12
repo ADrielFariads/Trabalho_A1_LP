@@ -6,7 +6,6 @@ import pandas as pd
 import Constants
 import numpy as np
 
-df = pd.read_csv(Constants.Constants.path)
 
 def read_data_set():
     '''
@@ -27,7 +26,7 @@ def cut_duplicates(df):
 
     Parameters:
     --------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     --------------
@@ -35,12 +34,12 @@ def cut_duplicates(df):
     
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
         
-        df = df.drop_duplicates()
+        df = df.drop_duplicates(subset=["moves"])
         return df
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
 
 def cut_short_games(df):
@@ -49,7 +48,7 @@ def cut_short_games(df):
 
     Parameters:
     --------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     --------------
@@ -57,19 +56,19 @@ def cut_short_games(df):
     
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
         
         df = df[df['turns'] >= 3]
         return df
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
     except KeyError:
         print('The DataFrame does not have the series (turns)')
         return None
     
 
-def quantile(data, number_of_divisions : int) -> set:
+def quantile(data, number_of_divisions : int) -> dict:
     '''
     Calculates the quantiles of a data set for the desired number of divisions
 
@@ -84,15 +83,15 @@ def quantile(data, number_of_divisions : int) -> set:
     
     '''
     try:
-        isinstance(data[0], np.int64 | int | float)
-        isinstance(number_of_divisions, int)
+        assert isinstance(data[0], np.int64 | int | float)
+        assert isinstance(number_of_divisions, int)
 
         quantis = {}  
         for i in range(0, number_of_divisions-1):
             quantis[i + 1] = np.percentile(data, (100/number_of_divisions)* (i + 1))
         return quantis
     
-    except TypeError:
+    except AssertionError:
         print('The arguments are not valid')
 
 
@@ -103,7 +102,7 @@ def add_black_white_level(df):
 
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     -------------
@@ -111,7 +110,7 @@ def add_black_white_level(df):
     
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
 
         all_rating_players = pd.concat([df['white_rating'], df['black_rating']], ignore_index=True)
         all_rating_quantiles = quantile(all_rating_players, 3)
@@ -126,8 +125,8 @@ def add_black_white_level(df):
         for rating in df['white_rating']
         ]
         return df
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
     except KeyError:
         print('The DataFrame does not have the series (white_rating) and (black_rating)')
@@ -144,7 +143,7 @@ def add_game_level(df):
 
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     -------------
@@ -152,7 +151,7 @@ def add_game_level(df):
     
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
 
         average_rating = (df['white_rating'] + df['black_rating'])/2
         avg_rating_quantiles = quantile(average_rating, 3)
@@ -163,8 +162,8 @@ def add_game_level(df):
         ]
         return df
     
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
     except KeyError:
         print('The DataFrame does not have the series (white_rating) and (black_rating)')
@@ -174,32 +173,6 @@ def add_game_level(df):
         return None
     
 
-def quantile(data, number_of_divisions : int) -> set:
-    '''
-    Calculates the quantiles of a data set for the desired number of divisions
-
-    Parameters:
-    -------------
-    data: numerical data set
-    number_of_divisions : int
-
-    Returns:
-    -------------
-    Dict with key equal the number of the quantile containing the quantiles
-    
-    '''
-    try:
-        isinstance(data[0], np.int64 | int | float)
-        isinstance(number_of_divisions, int)
-
-        quantis = {}  
-        for i in range(0, number_of_divisions-1):
-            quantis[i + 1] = np.percentile(data, (100/number_of_divisions)* (i + 1))
-        return quantis
-    
-    except TypeError:
-        print('The arguments are not valid')
-
 def add_game_duration(df):
     '''
     This function classifies the duration of the game into: low, medium and high
@@ -207,7 +180,7 @@ def add_game_duration(df):
     
     Parameters:
     -------------
-    DataFrame being analyzed
+    DataFrame being analyzed: pd.DataFrame
 
     Returns:
     ----------
@@ -215,32 +188,80 @@ def add_game_duration(df):
 
     '''
     try:
-        isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(df, pd.core.frame.DataFrame)
 
         turns = df['turns']
         quantiles = quantile(turns, 3)
 
         df['game_duration_in_turns'] = [
-            'low' if turn < quantile[1] else 'medium' if turn < quantile[2]
+            'low' if turn < quantiles[1] else 'medium' if turn < quantiles[2]
             else 'high' for turn in turns
         ]
         return df
     
-    except TypeError:
-        print('the argument is not a DataFrame')
+    except AssertionError:
+        print('The argument is not a DataFrame')
         return None
     except KeyError:
         print('The DataFrame does not have the turns series')
         return None
-
-
-
-
-
     
 
+def resign_games_filter(df, resign=True):
+    '''
+    This function filters the DataFrame to show only resigned (or non resigned) games
+    
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
 
+    resign=True: Bool
 
+    Returns:
+    ----------
+    DataFrame with only resigned or non resigned games 
 
+    '''
+    try:
+        assert isinstance(df, pd.core.frame.DataFrame)
+        assert isinstance(resign, bool)
 
- 
+        if resign == True:
+            df = df[df["victory_status"]=="resign"]
+            return df
+        else:
+            df = df[df["victory_status"]!="resign"]
+            return df
+    except AssertionError:
+        print('The arguments are invalid')
+    except Exception:
+        print("an error occurred while filtering your dataframe")
+        return None
+    
+def mate_games_filter(df):
+    '''
+    This function filters the DataFrame to show mate-only win games
+    
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+
+    Returns:
+    ----------
+    Dataframe with mate-only win
+    '''
+
+    try:
+
+        assert isinstance(df, pd.core.frame.DataFrame)
+        df = df[df['victory_status'] == 'mate']
+        return df
+
+    except AssertionError:
+        print('The argument is not a DataFrame')
+        return None
+    except KeyError:
+        print('The DataFrame does not have the victory_status series')
+        return None
+    
+

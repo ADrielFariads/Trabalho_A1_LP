@@ -5,7 +5,9 @@ Functions for making new data
 import pandas as pd
 import numpy as np
 import re
-import doctest
+import json
+
+import data_cleaner
 
 
 def count_moves(game:str, piece:str) -> int:
@@ -123,7 +125,7 @@ def game_matrix(game:str) -> np.array:
 
 
                 
-            elif each[0] in squares.keys():
+            elif each[0] in squares.keys(): #usual moves
                 column = squares[each[0]]
                 row = 8 - int(each[-1])
                 matrix[row][column] += 1
@@ -184,11 +186,91 @@ def piece_matrix(game:str, piece:str) -> np.array:
                     matrix[row][column] += 1
 
         return matrix
+    except KeyError:
+        print("the piece key is not valid, try another one.")
+        return None
     except AssertionError:
         return None
-            
 
+def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
+    """
+    Creates columns for each piece's moves
+
+    Parameters:
+    ----------
+    game : pd.DataFrame
+         A data frame with chess' games, the DataFrame must have the column "moves", which is in algebric notation
+    Returns:
+    -------
+    pd.DataFrame
+         a dataframe with columns for each piece, each column contains the number of moves for that piece
+    """
+    df = games
+    pieces = {
+    "pawn": [" a", " b", " c", " d", " e", " f", " g", " h"],
+    "king": "K",
+    "queen": "Q",
+    "knight": "N",
+    "bishop": "B",
+    "rook": "R"}
+    for piece in pieces.keys():
+        try:
+            df[f"{piece}_moves"] = df["moves"].apply(count_moves, piece = piece)
+            return df
+        except KeyError:
+            print("Houve um erro, selecione um nome válido de peça")
+            return None
+        
+
+def advantage_column(df):
+    with open("data\\games.json", 'r') as file:
+        stockfish_data = json.load(file)
+
+    advantage = [game.get('avaliacoes', None) for game in stockfish_data]
+
+    df = data_cleaner.cut_short_games(df)
+    df.loc[:, 'advantage'] = advantage
+
+    return df
+
+def desvpad_evaluate(games):
+    '''
+    This function filters the DataFrame to show only resigned (or non resigned) games
     
+    Parameters:
+    -------------
+    games: list
+        a dictionary list with matchs informations
+    Returns:
+    ----------
+    dict[str, list]:
+        a dictionary with deviations by level
+    dict[str, float]:
+        a average deviations by level
+    '''
+    desv_medium_reviews = []
+    desv_high_reviews = []
+    desv_low_reviews = []
+    for game in games:
+        if game["level"] == "medium":
+            desv_medium_reviews.append(np.std(game["reviews"]))
+        elif game["level"] == "high":
+            desv_high_reviews.append(np.std(game["reviews"]))
+        else:
+            desv_low_reviews.append(np.std(game["reviews"]))
+
+    desvs = {
+        "Low": desv_low_reviews,
+        "Medium": desv_medium_reviews,
+        "High": desv_high_reviews
+    }
+
+    desvs_mean = {
+        "Low": sum(desv_low_reviews)/len(desv_low_reviews),
+        "Medium" : sum(desv_medium_reviews)/len(desv_medium_reviews),
+        "High": sum(desv_high_reviews)/len(desv_high_reviews)
+        }
+    return desvs, desvs_mean
 
 
 
