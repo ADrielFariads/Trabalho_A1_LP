@@ -329,6 +329,80 @@ class test_cut_duplicates(unittest.TestCase):
 
         pd.testing.assert_frame_equal(example, result)
 
+class test_resign_games_filter(unittest.TestCase):
+    def test_normal_case(self):
+
+        example_data = {
+            'victory_status': ['resign','resign','mate','resign'],
+
+            'other_serie':['a','b','c','d']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'victory_status': ['resign','resign','resign'],
+
+            'other_serie':['a','b','d']
+
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.resign_games_filter(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
+    def test_other_case(self):
+
+        example_data = {
+            'victory_status': ['resign','resign','mate','resign'],
+
+            'other_serie':['a','b','c','d']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'victory_status': ['mate'],
+
+            'other_serie':['c']
+
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.resign_games_filter(example, False).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+        
+        pd.testing.assert_frame_equal(example, result)
+
+class test_mate_games_filter(unittest.TestCase):
+    def test_normal_case(self):
+
+        example_data = {
+            'victory_status': ['resign','mate','resign'],
+
+            'other_serie':['a','b','c']
+        }
+        example = pd.DataFrame(example_data)
+
+        result_data =  {
+
+            'victory_status': ['mate'],
+
+            'other_serie':['b']
+
+        }
+        result = pd.DataFrame(result_data)
+
+        #Removing the index for the test
+        example = data_cleaner.mate_games_filter(example).reset_index(drop = True)
+        result = result.reset_index(drop = True)
+
+        pd.testing.assert_frame_equal(example, result)
+
 if __name__ == "__main__":
     unittest.main()
 
