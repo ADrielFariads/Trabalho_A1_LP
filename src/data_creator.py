@@ -223,6 +223,20 @@ def pieces_columns_generator(games:pd.DataFrame) -> pd.DataFrame:
         
 
 def advantage_column(df):
+    '''
+    Create a column advantage
+
+    Parameters:
+    -------------
+    DataFrame: pd.DataFrame
+            DataFrame being analyzed.
+
+    Returns:
+    ----------
+    pd.DataFrame
+        DataFrame modified
+    
+    '''
     with open("data\\games.json", 'r') as file:
         stockfish_data = json.load(file)
 

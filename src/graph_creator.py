@@ -13,15 +13,6 @@ import Constants
 
 df = pd.read_csv(Constants.Constants.path)
 
-matriz = np.array([[1, 0, 0, 0, 2, 4, 3, 2],
-       [1, 2, 1, 2, 0, 1, 0, 1],
-       [0, 1, 1, 0, 1, 3, 2, 0],
-       [1, 0, 0, 1, 1, 0, 1, 2],
-       [0, 1, 0, 2, 1, 0, 2, 1],
-       [1, 0, 2, 1, 3, 1, 2, 5],
-       [0, 2, 1, 1, 2, 1, 1, 1],
-       [1, 1, 0, 3, 1, 4, 1, 0]])
-
 def heat_map_generator(game_matriz:np.array) -> plt:
     """
     Creates a plt of a heatmap, which represents how much each square is used in the game
@@ -60,6 +51,24 @@ def heat_map_generator(game_matriz:np.array) -> plt:
     return plt
 
 def boxplot_deviation_reviews(desvs, desvs_mean):
+    '''
+    Creates a box plot with all deviation reviews separated by level and a average deviations by level (Low, Medium, High)
+
+    Parameters:
+    -------------
+    desvs: dict[str, list]:
+        a dictionary with deviations by level    
+
+    desvs_mean: dict[str, float]:
+        a average deviations by level
+
+    Returns:
+    ----------
+    plt
+        The graph plot object
+
+
+    '''
     plt.figure(1)
     sns.boxplot(data=desvs,fliersize=0)
     plt.title('Avarage plays standard deviation')
@@ -71,6 +80,21 @@ def boxplot_deviation_reviews(desvs, desvs_mean):
     return plt
 
 def boxplot_all_games_reviews(games):
+    '''
+    Creates a box plot with all reviews separated by level (Low, Medium, High)
+
+    Parameters:
+    -------------
+    games: List
+        a dictionary list with matchs informations
+
+    Returns:
+    ----------
+    plt
+        The graph plot object
+
+
+    '''
     review_low = []
     review_medium = []
     review_high = []
@@ -147,9 +171,7 @@ def stacked_column_graph(df, title='Win Percentage by Turn-based Game Duration')
         plt.xticks(rotation=0)
         plt.legend(title='Winner' , loc = 'upper right',fontsize='small', borderpad=0.2)
         plt.ylim(0, 100)
-        plt.tight_layout() 
-
-        return plt        
+        return plt 
         
     except AssertionError:
         print('The arguments are not valid')
@@ -182,7 +204,8 @@ def violin_plot(df:pd.DataFrame, rated_games_only:bool=False) -> plt:
         df = df[df["rated"] == True]
 
     df["mean_rating"] = (df["white_rating"] + df["black_rating"])/2
-    sns.violinplot(x='victory_status', y='mean', data=df)
+    plt.figure(3)
+    sns.violinplot(x='victory_status', y='mean_rating', data=df)
     plt.ylabel('mean rating of players', fontweight='bold')
     plt.xlabel('type of defeat', fontweight='bold')
     if rated_games_only == True:
@@ -222,7 +245,7 @@ def rating_resign_graph(df:pd.DataFrame):
         
         sns.set_style("darkgrid")
         # Creates the bar graph
-        plt.figure(figsize=(8, 5))
+        plt.figure(5, figsize=(8, 5))
         sns.barplot(data=count_df, x='game_level', y='count',  hue='game_level', palette='viridis')
 
         # Graph settings
@@ -231,7 +254,6 @@ def rating_resign_graph(df:pd.DataFrame):
         plt.ylabel('Number of Matches', fontweight='bold')
         plt.xticks(rotation=0)
         plt.tight_layout()
-
         return plt
 
     except AssertionError:
@@ -240,7 +262,6 @@ def rating_resign_graph(df:pd.DataFrame):
     except KeyError:
         print('The DataFrame is missing one or more of the following series: rank, game level, and win status')
         return None
-
 
 
 

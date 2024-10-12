@@ -10,6 +10,10 @@ import numpy as np
 def read_data_set():
     '''
     Reads the database and returns the dataframe
+
+    Returns:
+    --------------
+    A DataFrame with games
     '''
     try:
 
